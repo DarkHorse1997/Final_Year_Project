@@ -9,7 +9,7 @@ path_of_video="dataset/s1_an_1.avi"
 path_of_model="/home/tanmoydas1997/Desktop/PaulVangent/shape_predictor_68_face_landmarks.dat"
 
 def FrameExtract(path1,path2):
-    print("Working with video file : " + path1)
+    print(f"Working with video file {path1[path1.find('/')+1:]} ")
     video_obj = cv2.VideoCapture(path1) #Video object
     detector = dlib.get_frontal_face_detector() #Face detector
     predictor = dlib.shape_predictor(path2) #Landmark identifier. Set the filename to whatever you named the downloaded file
@@ -55,8 +55,8 @@ def FrameExtract(path1,path2):
         count += 1
     p1=np.array(p)
     print(p1.shape)
-    np.save(path1[:path1.find(".")]+'/test.out', p1)
-    np.savetxt(path1[:path1.find(".")]+"/reshaped.txt", p1.reshape((3,-1)), fmt="%s", header=str(p1.shape))
+    np.save(path1[:path1.find(".")]+'/landmark_points_array.out', p1)
+    #np.savetxt(path1[:path1.find(".")]+"/reshaped.txt", p1.reshape((3,-1)), fmt="%s", header=str(p1.shape))
     return p1
 
 
@@ -90,7 +90,7 @@ def plot_landmark_on_frame(frame, path_of_image):
 
 
 def apply_kmeans(points,path):
-    print("Applying k-means to %s")
+    print(f"Applying k-means to {path[path.find('/')+1:]}")
     print(points.shape)
     from sklearn.cluster import KMeans
 
@@ -118,8 +118,8 @@ if __name__ == '__main__':
     
     video_file_list=os.listdir("dataset")
 
-    video_list = filter(lambda x: x.endswith('.avi'), video_file_list)
-    print(video_file_list)
+    video_list = list(filter(lambda x: x.endswith('.avi'), video_file_list))
+    print(f"List of videos: {video_list}")
     for filename in video_list:
         path_of_video="dataset/"+filename    
         point=FrameExtract(path_of_video,path_of_model)
