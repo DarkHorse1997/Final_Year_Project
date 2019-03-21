@@ -2,7 +2,7 @@ import cv2
 import dlib
 import os
 import numpy as np
-import matplotlib as plt
+import matplotlib.pyplot as plt
 #from imutils import face_utils
 
 path_of_video="dataset/s1_an_1.avi"
@@ -16,7 +16,7 @@ def FrameExtract(path1,path2):
     count = 0
     ret = 1
     p=[]
-    print(type(p))
+    
     while ret:                        #Runs ONCE for each FRAME
         ret, frame = video_obj.read()
         if(ret == 0):
@@ -47,14 +47,16 @@ def FrameExtract(path1,path2):
         #print(shape1-vec)
         #cv2.imshow("image", frame) #Display the frame
         #print("enter after loop")
-       # if not os.path.exists(path1[:path1.find(".")]):
-        #        os.makedirs(path1[:path1.find(".")])
-        print(count)
+        if not os.path.exists(path1[:path1.find(".")]):
+               os.makedirs(path1[:path1.find(".")])
+        #print(count)
         #cv2.imwrite(path1[:path1.find(".")]+"/frame%d.jpg" % count, imag) 
         
         count += 1
     p1=np.array(p)
     print(p1.shape)
+    np.save(path1[:path1.find(".")]+'/test.out', p1)
+    np.savetxt(path1[:path1.find(".")]+"/reshaped.txt", p1.reshape((3,-1)), fmt="%s", header=str(p1.shape))
     return p1
 
 
@@ -87,8 +89,9 @@ def plot_landmark_on_frame(frame, path_of_image):
 
 
 
-def apply_kmeans(points):
-
+def apply_kmeans(points,path):
+    print("Applying k-means to %s")
+    print(points.shape)
     from sklearn.cluster import KMeans
 
 
@@ -100,7 +103,11 @@ def apply_kmeans(points):
 
     centroid_x = kmeans_x.cluster_centers_
     centroid_y = kmeans_y.cluster_centers_
-
+    
+    np.savetxt(path[:path.find(".")]+'/centroid_x.out', centroid_x)
+    np.savetxt(path[:path.find(".")]+'/centroid_y.out', centroid_y)
+    
+    
     plt.scatter(centroid_x, centroid_y)
     ax = plt.gca()
     ax.invert_yaxis()
@@ -109,11 +116,14 @@ def apply_kmeans(points):
 # Driver Code 
 if __name__ == '__main__': 
     
+    video_file_list=os.listdir("dataset")
 
-    for filename in os.listdir("dataset"):
+    video_list = filter(lambda x: x.endswith('.avi'), video_file_list)
+    print(video_file_list)
+    for filename in video_list:
         path_of_video="dataset/"+filename    
         point=FrameExtract(path_of_video,path_of_model)
-        apply_kmeans(point)
+        apply_kmeans(point,path_of_video)
 
 
 
