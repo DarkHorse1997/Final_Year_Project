@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 #from imutils import face_utils
 
-path_of_video="dataset/s1_an_1.avi"
+#path_of_video="dataset/s1_an_1.avi"
 path_of_model="/home/tanmoydas1997/Desktop/PaulVangent/shape_predictor_68_face_landmarks.dat"
 
 def FrameExtract(path1,path2):
