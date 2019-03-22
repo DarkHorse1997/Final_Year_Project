@@ -45,8 +45,9 @@ def find_distance(cent,no_of_clusters,distance_type,path):
     #print(minframe)
     #return minframe
     print(np.array(distance_vector).shape)
-    np.savetxt(path + "/displacement_vector.out",distance_vector)
 
+    np.savetxt(path + "/displacement_vector.out",distance_vector)
+    return distance_vector
 
 
 if __name__ == '__main__': 
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         centroid_y = np.loadtxt(path + '/centroid_y.out')
         cent = convert_xy_to_points(centroid_x,centroid_y)
         p1 =  np.load(path + '/landmark_points_array.out.npy')
-        find_distance(cent,cent.shape[0],'euclidean',path)
+        displacement=find_distance(cent,cent.shape[0],'euclidean',path)
 
 
 
