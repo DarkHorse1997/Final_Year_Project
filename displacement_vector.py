@@ -38,12 +38,7 @@ def find_distance(cent,no_of_clusters,distance_type,path):
         print(y.shape)
         distance_vector.append(np.diag(y))
         #print(np.diag(y))
-            #dist.append(np.trace(y))
-            #print(str(i)+"  "+str(np.trace(y)))
-        #dd=np.array(dist)
-        #minframe.append(np.argmin(dd))
-    #print(minframe)
-    #return minframe
+        
     print(np.array(distance_vector).shape)
     np.savetxt(path + "/displacement_vector.out",distance_vector)
 
