@@ -26,24 +26,25 @@ def convert_xy_to_points(centroid_x,centroid_y):
 
 #z = scipy.spatial.distance.cdist(A,B,'chebyshev')
 def find_distance(cent,no_of_clusters,distance_type,path):
-    print(f"Finding {distance_type} distance between key points for {path[path.find('/'):]} ")
-    leng=p1.shape[0]
-        
+    print(f"Finding {distance_type} distance between key points for {path[path.find('/')+1:]} ")
+    
+    distance_vector = []  
     print(cent[1].shape)
     for i in range(0,no_of_clusters-1,1):
         print(f"Calculating distance matrix between key-frame {i} and key-frame {i+1}")
-        
+        #print(cent[i])
         y = distance.cdist(cent[i],cent[i+1],distance_type)
+        #print(y)
         print(y.shape)
-        # += 1
-            #print(np.sum(np.diag(y)))
+        distance_vector.append(np.diag(y))
+        #print(np.diag(y))
             #dist.append(np.trace(y))
             #print(str(i)+"  "+str(np.trace(y)))
         #dd=np.array(dist)
         #minframe.append(np.argmin(dd))
     #print(minframe)
     #return minframe
-    
+    print(np.array(distance_vector).shape)
 
 
 
