@@ -107,12 +107,8 @@ def apply_kmeans(points,path):
     np.savetxt(path[:path.find(".")]+'/centroid_x.out', centroid_x)
     np.savetxt(path[:path.find(".")]+'/centroid_y.out', centroid_y)
     
+    #See helper_snippets Snippet #2
     
-    plt.scatter(centroid_x, centroid_y)
-    ax = plt.gca()
-    ax.invert_yaxis()
-    plt.show()
-
 # Driver Code 
 if __name__ == '__main__': 
     
