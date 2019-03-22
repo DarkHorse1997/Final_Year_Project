@@ -45,6 +45,7 @@ def find_distance(cent,no_of_clusters,distance_type,path):
     #print(minframe)
     #return minframe
     print(np.array(distance_vector).shape)
+    np.savetxt(path + "/displacement_vector.out",distance_vector)
 
 
 
