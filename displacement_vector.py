@@ -52,8 +52,8 @@ def convert_to_dataframe(array):
     #print(array.shape)
     #print(array[0].shape)
     print("Converting Numpy array to Pandas Dataframe \n ")
-    #print(array.shape[0])  #Number of key frames
-    #print(array[0].shape[0])  #Number of landmark points
+    #print(array.shape[0])  #Number of key frames 5
+    #print(array[0].shape[0])  #Number of landmark points 68
     t1=[]
     for i in range(array[0].shape[0]):
         t1.append(f'landmark_{i}')
@@ -68,8 +68,30 @@ def convert_to_dataframe(array):
     return a
 
 
+def plot_displacement_all(displacement,filename):
+    #print(displacement.shape)
+    
+    
+    plt.figure(figsize = (20,15))
+    
+    #sns.lineplot(data=a)
+    for i in range(68):
 
-def plot_displacement(displacement):
+        ax = sns.lineplot(data = displacement, x = 'index', y = f'landmark_{i}',legend = "full")
+
+    sns.set_context("paper")
+    ax.set_title(f'{filename}')
+    ax.set_xlabel("Displacement Value")
+    ax.set_ylabel("Frames")
+
+    plt.show()
+    #
+    #for i in range(68):
+
+        #y=displacement[:, 0]
+        #a.plot(y=f'landmark_{i}',ax=ax)
+    #return ax    
+def plot_displacement_single(displacement):
     #print(displacement.shape)
     
     
@@ -82,7 +104,7 @@ def plot_displacement(displacement):
         #y=displacement[:, 0]
         #a.plot(y=f'landmark_{i}',ax=ax)
     return ax    
-    
+
 
 if __name__ == '__main__': 
 
@@ -100,9 +122,11 @@ if __name__ == '__main__':
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
         disp=convert_to_dataframe(displacement)
-        ax = plot_displacement(disp)
+        #ax = plot_displacement_single(disp)
+        plot_displacement_all(disp,filename)
+        
 
-    plt.show()
+    #plt.show()
 
 
 
