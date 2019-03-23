@@ -5,8 +5,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 sns.set()
-
-path="dataset/s1_an_1.avi"
+folder = "subject1/anger"
+#path="dataset/s1_an_1.avi"
 
 def convert_xy_to_points(centroid_x,centroid_y):
     l=[]
@@ -77,27 +77,34 @@ def plot_displacement_all(displacement,filename): # This function helps to plot 
     #sns.lineplot(data=a)
     for i in range(68):
 
-        ax = sns.lineplot(data = displacement, x = 'index', y = f'landmark_{i}',legend = "full")
+        #ax = sns.lineplot(data = displacement, x = 'index', y = f'landmark_{i}',legend = "full" ,label = f"landmark {i}") to get legend (which doesn't fit right now)
+        ax = sns.lineplot(data = displacement, x = 'index', y = f'landmark_{i}',legend = "full" )
 
-    sns.set_context("paper")
+    sns.set_context("talk")
     ax.set_title(f'{filename}')
-    ax.set_xlabel("Displacement Value")
-    ax.set_ylabel("Frames")
-
-    plt.show()
+    ax.set_ylabel("Displacement Value")
+    ax.set_xlabel("Frames")
+    
+    #plt.legend(loc='upper center')
+    #print(f'{folder}/{filename}/{filename}.png')
+    #plt.savefig(f'{folder}/{filename}.png', format='png', dpi=300) All images are saved together
+    plt.savefig(f'{folder}/{filename}/{filename}.png', format='png', dpi=300) #Each image saved in different folder
+    #plt.show()
     #
     #for i in range(68):
 
         #y=displacement[:, 0]
         #a.plot(y=f'landmark_{i}',ax=ax)
     #return ax    
-def plot_displacement_single(displacement): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
+def plot_displacement_single(displacement,filename): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
     #print(displacement.shape)
     
     
     
     #sns.lineplot(data=a)
-    ax = sns.lineplot(data = displacement, x = 'index', y = 'landmark_0')
+    ax = sns.lineplot(data = displacement, x = 'index', y = 'landmark_0', label = f"{filename}")
+    plt.legend()
+    
     #ax=plt.gca()
     #for i in range(68):
 
@@ -109,12 +116,12 @@ def plot_displacement_single(displacement): # This video helps to plot a SINGLE 
 if __name__ == '__main__': 
 
     
-    video_file_list=os.listdir("dataset")
-
-    video_list = list(filter(lambda x: not(x.endswith('.avi')), video_file_list))
+    video_file_list=os.listdir(folder)
+    #folder = "subject1/disgust"
+    video_list = list(filter(lambda x: not(x.endswith('.avi') or x.endswith('.svg') or x.endswith('.png')), video_file_list))
     print(f"List of videos: {video_list}")
     for filename in video_list:
-        path = "dataset/" + filename 
+        path = folder + "/" + filename 
         #print(path)   
         centroid_x = np.loadtxt(path + '/centroid_x.out')
         centroid_y = np.loadtxt(path + '/centroid_y.out')
@@ -122,12 +129,12 @@ if __name__ == '__main__':
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
         disp=convert_to_dataframe(displacement)
-        ax = plot_displacement_single(disp) # 
-        #plot_displacement_all(disp,filename)
-        
-
-    plt.show()
-
+        #ax = plot_displacement_single(disp,filename) # 
+        plot_displacement_all(disp,filename)
+     
+    #plt.savefig('anger.svg', format='svg', dpi=1200)
+    #plt.show()
+   
 
 
 

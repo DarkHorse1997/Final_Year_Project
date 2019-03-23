@@ -4,7 +4,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 #from imutils import face_utils
-
+folder = "subject1/surprise"
 #path_of_video="dataset/s1_an_1.avi"
 path_of_model="/home/tanmoydas1997/Desktop/PaulVangent/shape_predictor_68_face_landmarks.dat"
 
@@ -112,12 +112,12 @@ def apply_kmeans(points,path):
 # Driver Code 
 if __name__ == '__main__': 
     
-    video_file_list=os.listdir("dataset")
+    video_file_list=os.listdir(folder)
 
     video_list = list(filter(lambda x: x.endswith('.avi'), video_file_list))
     print(f"List of videos: {video_list}")
     for filename in video_list:
-        path_of_video="dataset/"+filename    
+        path_of_video= folder + "/" + filename    
         point=FrameExtract(path_of_video,path_of_model)
         apply_kmeans(point,path_of_video)
 
