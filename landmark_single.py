@@ -5,7 +5,7 @@ import numpy as np
 import os
 sns.set()
 
-folder = "subject1/anger"
+folder = "subject1/surprise"
 
 
 def plot_displacement_single(index): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
@@ -31,6 +31,7 @@ def plot_displacement_single(index): # This video helps to plot a SINGLE landmar
     if not os.path.exists(f'landmark_graphs {folder}'):
                os.makedirs(f'landmark_graphs {folder}')
     plt.savefig(f'landmark_graphs {folder}/landmark_{index}.png', format='png', dpi=300)
+    plt.close()
     #plt.show()
     
     
