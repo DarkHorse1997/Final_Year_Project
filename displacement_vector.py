@@ -44,9 +44,9 @@ def find_distance(cent,no_of_clusters,distance_type,path):
         #print(np.diag(y))
         
     #print(np.array(distance_vector))
-
+    distance_vector = np.array(distance_vector)
     np.savetxt(path + "/displacement_vector.out",distance_vector)
-    return np.array(distance_vector)
+    return distance_vector
 
 def convert_to_dataframe(array): 
     #print(array.shape)
@@ -63,7 +63,7 @@ def convert_to_dataframe(array):
 
     for i in range(array.shape[0]):
         t2.append(f'frame {i} - {i+1}')    
-    a = pd.DataFrame(data=displacement,index=t2,columns=t1)
+    a = pd.DataFrame(data=array,index=t2,columns=t1)
     a = a.reset_index()
     return a
 
@@ -96,20 +96,33 @@ def plot_displacement_all(displacement,filename): # This function helps to plot 
         #y=displacement[:, 0]
         #a.plot(y=f'landmark_{i}',ax=ax)
     #return ax    
-def plot_displacement_single(displacement,filename): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
+def plot_displacement_single(): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
+    #WHAT TO DO 
     #print(displacement.shape)
+    print("Opening plot_displacment")
+    video_file_list=os.listdir(folder)
+    #folder = "subject1/disgust"
+    video_list = list(filter(lambda x: not(x.endswith('.avi') or x.endswith('.svg') or x.endswith('.png')), video_file_list))
+    print(f"List of videos: {video_list}")
     
-    
-    
+    for filename in video_list:
+
+        path = folder + "/" + filename 
+        displacement = np.loadtxt(path + "/displacement_vector.out")
+        print(f'{path + "/displacement_vector.out"}')
+        disp = convert_to_dataframe(displacement)
+
     #sns.lineplot(data=a)
-    ax = sns.lineplot(data = displacement, x = 'index', y = 'landmark_0', label = f"{filename}")
-    plt.legend()
-    
+        ax = sns.lineplot(data = disp, x = 'index', y = 'landmark_0', label = f"{filename}")
+        #plt.show()
+        #plt.legend()
+    plt.show()
     #ax=plt.gca()
     #for i in range(68):
 
         #y=displacement[:, 0]
         #a.plot(y=f'landmark_{i}',ax=ax)
+    
     return ax    
 
 
@@ -129,8 +142,8 @@ if __name__ == '__main__':
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
         disp=convert_to_dataframe(displacement)
-        #ax = plot_displacement_single(disp,filename) # 
-        plot_displacement_all(disp,filename)
+        plot_displacement_single() # 
+        #plot_displacement_all(disp,filename)
      
     #plt.savefig('anger.svg', format='svg', dpi=1200)
     #plt.show()
