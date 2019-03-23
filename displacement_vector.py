@@ -48,7 +48,7 @@ def find_distance(cent,no_of_clusters,distance_type,path):
     np.savetxt(path + "/displacement_vector.out",distance_vector)
     return np.array(distance_vector)
 
-def convert_to_dataframe(array):
+def convert_to_dataframe(array): 
     #print(array.shape)
     #print(array[0].shape)
     print("Converting Numpy array to Pandas Dataframe \n ")
@@ -68,7 +68,7 @@ def convert_to_dataframe(array):
     return a
 
 
-def plot_displacement_all(displacement,filename):
+def plot_displacement_all(displacement,filename): # This function helps to plot all landmark points for each video in 1 graph
     #print(displacement.shape)
     
     
@@ -91,7 +91,7 @@ def plot_displacement_all(displacement,filename):
         #y=displacement[:, 0]
         #a.plot(y=f'landmark_{i}',ax=ax)
     #return ax    
-def plot_displacement_single(displacement):
+def plot_displacement_single(displacement): # This video helps to plot a SINGLE landmark point for all videos in 1 graph
     #print(displacement.shape)
     
     
@@ -122,11 +122,11 @@ if __name__ == '__main__':
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
         disp=convert_to_dataframe(displacement)
-        #ax = plot_displacement_single(disp)
-        plot_displacement_all(disp,filename)
+        ax = plot_displacement_single(disp) # 
+        #plot_displacement_all(disp,filename)
         
 
-    #plt.show()
+    plt.show()
 
 
 
