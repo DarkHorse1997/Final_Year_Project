@@ -1,6 +1,10 @@
 import numpy as np
 from scipy.spatial import distance
 import os
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+sns.set()
 
 path="dataset/s1_an_1.avi"
 
@@ -39,13 +43,37 @@ def find_distance(cent,no_of_clusters,distance_type,path):
         distance_vector.append(np.diag(y))
         #print(np.diag(y))
         
-    print(np.array(distance_vector).shape)
+    #print(np.array(distance_vector))
 
     np.savetxt(path + "/displacement_vector.out",distance_vector)
-    return distance_vector
+    return np.array(distance_vector)
 
+
+def plot_displacement(displacement):
+    print(displacement.shape)
+    x = range(5)
+    t1=[]
+    for i in range(68):
+        t1.append(f'landmark_{i}')
+    t2=[]
+
+    for i in range(5):
+        t2.append(f'frame {i} - {i+1}')    
+    a = pd.DataFrame(data=displacement,index=t2,columns=t1)
+    a = a.reset_index()
+    print(a)
+    #sns.lineplot(data=a)
+    ax = sns.lineplot(data = a.reset_index(), x = 'index', y = 'landmark_0')
+    #ax=plt.gca()
+    #for i in range(68):
+
+        #y=displacement[:, 0]
+        #a.plot(y=f'landmark_{i}',ax=ax)
+    return ax    
+    
 
 if __name__ == '__main__': 
+
     
     video_file_list=os.listdir("dataset")
 
@@ -59,6 +87,9 @@ if __name__ == '__main__':
         cent = convert_xy_to_points(centroid_x,centroid_y)
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
+        ax = plot_displacement(displacement)
+
+    plt.show()
 
 
 
