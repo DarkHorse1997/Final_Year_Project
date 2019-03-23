@@ -23,7 +23,7 @@ def convert_xy_to_points(centroid_x,centroid_y):
         l11=[]
 
     cent=np.array(centroid)
-    print(cent.shape)
+    print(f'Dimensions of Landmark Points array : {cent.shape} \n')
     return cent
     #print(cent)
 
@@ -33,13 +33,13 @@ def find_distance(cent,no_of_clusters,distance_type,path):
     print(f"Finding {distance_type} distance between key points for {path[path.find('/')+1:]} ")
     
     distance_vector = []  
-    print(cent[1].shape)
+    #print(cent[1].shape)
     for i in range(0,no_of_clusters-1,1):
         print(f"Calculating distance matrix between key-frame {i} and key-frame {i+1}")
         #print(cent[i])
         y = distance.cdist(cent[i],cent[i+1],distance_type)
         #print(y)
-        print(y.shape)
+        #print(y.shape)
         distance_vector.append(np.diag(y))
         #print(np.diag(y))
         
@@ -48,22 +48,34 @@ def find_distance(cent,no_of_clusters,distance_type,path):
     np.savetxt(path + "/displacement_vector.out",distance_vector)
     return np.array(distance_vector)
 
-
-def plot_displacement(displacement):
-    print(displacement.shape)
-    x = range(5)
+def convert_to_dataframe(array):
+    #print(array.shape)
+    #print(array[0].shape)
+    print("Converting Numpy array to Pandas Dataframe \n ")
+    #print(array.shape[0])  #Number of key frames
+    #print(array[0].shape[0])  #Number of landmark points
     t1=[]
-    for i in range(68):
+    for i in range(array[0].shape[0]):
         t1.append(f'landmark_{i}')
+
+    
     t2=[]
 
-    for i in range(5):
+    for i in range(array.shape[0]):
         t2.append(f'frame {i} - {i+1}')    
     a = pd.DataFrame(data=displacement,index=t2,columns=t1)
     a = a.reset_index()
-    print(a)
+    return a
+
+
+
+def plot_displacement(displacement):
+    #print(displacement.shape)
+    
+    
+    
     #sns.lineplot(data=a)
-    ax = sns.lineplot(data = a.reset_index(), x = 'index', y = 'landmark_0')
+    ax = sns.lineplot(data = displacement, x = 'index', y = 'landmark_0')
     #ax=plt.gca()
     #for i in range(68):
 
@@ -81,13 +93,14 @@ if __name__ == '__main__':
     print(f"List of videos: {video_list}")
     for filename in video_list:
         path = "dataset/" + filename 
-        print(path)   
+        #print(path)   
         centroid_x = np.loadtxt(path + '/centroid_x.out')
         centroid_y = np.loadtxt(path + '/centroid_y.out')
         cent = convert_xy_to_points(centroid_x,centroid_y)
         p1 =  np.load(path + '/landmark_points_array.out.npy')
         displacement=find_distance(cent,cent.shape[0],'euclidean',path)
-        ax = plot_displacement(displacement)
+        disp=convert_to_dataframe(displacement)
+        ax = plot_displacement(disp)
 
     plt.show()
 
